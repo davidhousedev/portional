@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'portional.urls'
+ROOT_URLCONF = 'portional-web.urls'
 
 TEMPLATES = [
     {
@@ -67,7 +67,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'portional.wsgi.application'
+WSGI_APPLICATION = 'portional-web.wsgi.application'
 
 
 # Database
