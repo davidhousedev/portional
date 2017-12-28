@@ -1,0 +1,18 @@
+FROM python:3
+
+EXPOSE 8000
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get clean
+
+ENV PYTHONUNBUFFERED 1
+
+ADD requirements.txt /tmp
+RUN pip install -r /tmp/requirements.txt
+
+ADD ./test-requirements.txt /tmp
+RUN pip install -r /tmp/test-requirements.txt
+
+WORKDIR /app
+ADD . .

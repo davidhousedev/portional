@@ -1,23 +1,32 @@
-BASE_COMPOSE = docker-compose.yml
-DEV_COMPOSE = docker-compose.dev.yml
-COMPOSE_UP_OPTS = -d --build
+BASE_COMPOSE = -f docker-compose.yml
+DEV_COMPOSE = ${BASE_COMPOSE} -f docker-compose.dev.yml
+TEST_COMPOSE = ${BASE_COMPOSE} -f docker-compose.test.yml
+COMPOSE_UP_OPTS = -d
+
+SERVICES = web
 
 
 default: serve
 
 develop:
-	docker-compose \
-		-f $(BASE_COMPOSE) \
-		-f $(DEV_COMPOSE) \
-		up $(COMPOSE_UP_OPTS)
+	docker-compose $(DEV_COMPOSE) up $(COMPOSE_UP_OPTS)
 
 .PHONY: serve
-serve:
+serve: build
 	docker-compose up $(COMPOSE_UP_OPTS)
 
 .PHONY: build
 build:
 	docker-compose build
+
+build-test:
+	docker-compose $(TEST_COMPOSE) build
+
+.PHONY: test
+test: build-test
+	for service in ${SERVICES} ; do \
+		docker-compose $(TEST_COMPOSE) run $$service ; \
+	done
 
 .PHONY: stop
 stop:

@@ -4,3 +4,4 @@ services:
   web:
     volumes:
       - ./portional-web:/app
+    image: portional_web:dev

@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  web:
+    build:
+      dockerfile: Dockerfile-test
+    image: portional_web:test
+    entrypoint:
+      - bash
+      - run_tests.sh
