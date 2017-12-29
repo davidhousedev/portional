@@ -5,6 +5,3 @@ services:
     build:
       dockerfile: Dockerfile-test
     image: portional_web:test
-    entrypoint:
-      - bash
-      - run_tests.sh

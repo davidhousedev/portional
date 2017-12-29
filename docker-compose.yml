@@ -5,6 +5,8 @@ services:
     image: postgres:alpine
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
   web:
     build: ./portional-web/
     ports:

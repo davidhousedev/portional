@@ -25,7 +25,7 @@ build-test:
 .PHONY: test
 test: build-test
 	for service in ${SERVICES} ; do \
-		docker-compose $(TEST_COMPOSE) run $$service ; \
+		docker-compose $(TEST_COMPOSE) run $$service bash run_tests.sh ; \
 	done
 
 .PHONY: stop
