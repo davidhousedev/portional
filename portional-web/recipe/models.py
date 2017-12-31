@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class UUIDModel(models.Model):
@@ -57,7 +58,7 @@ class Instruction(models.Model):
         if not self.ingredients.all():
             return  self.orig_text  # No compilation required
         ingredient_id_map = {
-            ing.id: f'{prefix}{str(ing)}{suffix}'
+            f'{settings.DB_ID_PREFIX}{ing.id}': f'{prefix}{str(ing)}{suffix}'
             for ing in self.ingredients.all()
         }
         self.db_id_text = self.db_id_text.format(**ingredient_id_map)
