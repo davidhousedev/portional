@@ -13,19 +13,19 @@ class UUIDModel(models.Model):
 class Recipe(UUIDModel):
     name = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True)
-    imported_by = models.ForeignKey(User,
-                                    on_delete=models.CASCADE,
-                                    related_name='imported_recipes')
+    owner = models.ForeignKey(User,
+                              on_delete=models.CASCADE,
+                              related_name='recipes')
 
     def __str__(self):
         return f'{self.name}'
 
 
 class Ingredient(UUIDModel):
-    orig_name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return f'{self.orig_name}'
+        return f'{self.name}'
 
 
 class RecipeIngredient(models.Model):
@@ -54,15 +54,15 @@ class Instruction(models.Model):
                                related_name='instructions')
     ingredients = models.ManyToManyField(RecipeIngredient, blank=True)
 
-    def compile(self, prefix='', suffix=''):
-        if not self.ingredients.all():
-            return  self.orig_text  # No compilation required
-        ingredient_id_map = {
-            f'{settings.DB_ID_PREFIX}{ing.id}': f'{prefix}{str(ing)}{suffix}'
-            for ing in self.ingredients.all()
-        }
-        self.db_id_text = self.db_id_text.format(**ingredient_id_map)
-        return self.db_id_text
+    # def compile(self, prefix='', suffix=''):
+    #     if not self.ingredients.all():
+    #         return self.orig_text  # No compilation required
+    #     ingredient_id_map = {
+    #         f'{settings.DB_ID_PREFIX}{ing.id}': f'{prefix}{str(ing)}{suffix}'
+    #         for ing in self.ingredients.all()
+    #     }
+    #     self.db_id_text = self.db_id_text.format(**ingredient_id_map)
+    #     return self.db_id_text
 
     def __str__(self):
         return f'{self.recipe} {self.order}: {self.orig_text}'
