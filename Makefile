@@ -16,11 +16,11 @@ develop:
 
 .PHONY: serve
 serve: build
-	docker-compose up $(COMPOSE_UP_OPTS)
+	docker-compose $(DEV_COMPOSE) up $(COMPOSE_UP_OPTS)
 
 .PHONY: build
 build:
-	docker-compose build
+	docker-compose $(DEV_COMPOSE) build
 
 build-test:
 	docker-compose $(TEST_COMPOSE) build
@@ -33,11 +33,11 @@ test: build-test
 
 .PHONY: stop
 stop:
-	docker-compose kill -s SIGINT
+	docker-compose $(DEV_COMPOSE) kill -s SIGINT
 
 .PHONY: clean
 clean: stop
-	docker-compose down --remove-orphans
+	docker-compose $(DEV_COMPOSE) rm -fs
 
 .PHONY: shell
 shell: develop
