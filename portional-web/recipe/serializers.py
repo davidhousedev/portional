@@ -1,28 +1,57 @@
-from rest_framework import serializers
-from rest_framework import permissions
+from rest_framework import mixins, serializers
 from recipe.models import Recipe, Ingredient, RecipeIngredient
 from django.contrib.auth.models import User
 
+#
+# class OwnerFieldMixin(serializers.ModelSerializer):
+#     owner = serializers.HyperlinkedRelatedField(
+#         view_name='user-detail', read_only=True
+#     )
+#
+#     def validate_owner(self, value):
+#         req = self.context['request']
 
-class IngredientSerializer(serializers.ModelSerializer):
+
+class IngredientSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Ingredient
-        fields = ('id', 'name')
+        fields = '__all__'
 
 
-class RecipeSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.username')
+class RecipeIngredientSerializer(serializers.HyperlinkedModelSerializer):
+    owner = serializers.HyperlinkedRelatedField(
+        view_name='user-detail',
+        read_only=True)
+    ingredient = serializers.HyperlinkedRelatedField(
+        view_name='ingredient-detail',
+        queryset=Ingredient.objects.all())
+    recipe = serializers.HyperlinkedRelatedField(
+        view_name='recipe-detail',
+        queryset=Recipe.objects.all())
+
+    class Meta:
+        model = RecipeIngredient
+        fields = '__all__'
+
+
+class RecipeSerializer(serializers.HyperlinkedModelSerializer):
+    owner = serializers.HyperlinkedRelatedField(
+        view_name='user-detail', read_only=True
+    )
+    ingredients = RecipeIngredientSerializer(
+        read_only=True,
+        many=True)
 
     class Meta:
         model = Recipe
-        fields = ('created', 'id', 'name', 'owner')
+        fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
-    recipes = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Recipe.objects.all())
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    recipes = serializers.HyperlinkedRelatedField(
+        many=True, view_name='recipe-detail', read_only=True)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'recipes')
+        fields = '__all__'
