@@ -10,7 +10,9 @@ class Recipe(models.Model):
     owner = models.ForeignKey(User,
                               on_delete=models.CASCADE,
                               related_name='recipes')
-    uid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uid = models.UUIDField(default=uuid.uuid4,
+                           editable=False,
+                           primary_key=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -18,7 +20,9 @@ class Recipe(models.Model):
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    uid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uid = models.UUIDField(default=uuid.uuid4,
+                           editable=False,
+                           primary_key=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -36,7 +40,9 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe,
                                on_delete=models.CASCADE,
                                related_name='ingredients')
-    uid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uid = models.UUIDField(default=uuid.uuid4,
+                           editable=False,
+                           primary_key=True)
 
     def __str__(self):
         return f'{self.amount} {self.scale} {self.ingredient}'
@@ -52,17 +58,9 @@ class Instruction(models.Model):
                                on_delete=models.CASCADE,
                                related_name='instructions')
     ingredients = models.ManyToManyField(RecipeIngredient, blank=True)
-    uid = models.UUIDField(default=uuid.uuid4, editable=False)
-
-    # def compile(self, prefix='', suffix=''):
-    #     if not self.ingredients.all():
-    #         return self.orig_text  # No compilation required
-    #     ingredient_id_map = {
-    #         f'{settings.DB_ID_PREFIX}{ing.id}': f'{prefix}{str(ing)}{suffix}'
-    #         for ing in self.ingredients.all()
-    #     }
-    #     self.db_id_text = self.db_id_text.format(**ingredient_id_map)
-    #     return self.db_id_text
+    uid = models.UUIDField(default=uuid.uuid4,
+                           editable=False,
+                           primary_key=True)
 
     def __str__(self):
         return f'{self.recipe} {self.order}: {self.orig_text}'
