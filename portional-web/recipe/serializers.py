@@ -1,5 +1,5 @@
 from rest_framework import mixins, serializers
-from recipe.models import Recipe, Ingredient, RecipeIngredient
+from recipe import models
 from django.contrib.auth.models import User
 
 #
@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 class IngredientSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
-        model = Ingredient
+        model = models.Ingredient
         fields = '__all__'
 
 
@@ -25,13 +25,13 @@ class RecipeIngredientSerializer(serializers.HyperlinkedModelSerializer):
         read_only=True)
     ingredient = serializers.HyperlinkedRelatedField(
         view_name='ingredient-detail',
-        queryset=Ingredient.objects.all())
+        queryset=models.Ingredient.objects.all())
     recipe = serializers.HyperlinkedRelatedField(
         view_name='recipe-detail',
-        queryset=Recipe.objects.all())
+        queryset=models.Recipe.objects.all())
 
     class Meta:
-        model = RecipeIngredient
+        model = models.RecipeIngredient
         fields = '__all__'
 
 
@@ -44,7 +44,7 @@ class RecipeSerializer(serializers.HyperlinkedModelSerializer):
         many=True)
 
     class Meta:
-        model = Recipe
+        model = models.Recipe
         fields = '__all__'
 
 
@@ -54,4 +54,23 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
+        fields = '__all__'
+
+
+class EquipmentSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Equipment
+        fields = '__all__'
+
+
+class InstructionSerializer(serializers.HyperlinkedModelSerializer):
+    recipe = serializers.HyperlinkedRelatedField(
+        view_name='recipe-detail',
+        queryset=models.Recipe.objects.all())
+    ingredients = RecipeIngredientSerializer(many=True)
+    equipment = serializers.SlugRelatedField(
+        slug_field='name',
+        queryset=models.Equipment.objects.all())
+    class Meta:
+        model = models.Instruction
         fields = '__all__'

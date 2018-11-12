@@ -45,22 +45,37 @@ class RecipeIngredient(models.Model):
                            primary_key=True)
 
     def __str__(self):
-        return f'{self.amount} {self.scale} {self.ingredient}'
+        return f'{self.quantity or self.volume} ' \
+               f'{self.ingredient}'
 
     def __repr__(self):
         return f'Recipe Ingredient: {self} used in {self.recipe}'
 
+
+class Equipment(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    uid = models.UUIDField(default=uuid.uuid4,
+                           editable=False,
+                           primary_key=True)
+
+
 class Instruction(models.Model):
-    orig_text = models.TextField()
-    db_id_text = models.TextField(blank=True)
+    text = models.TextField()
     order = models.SmallIntegerField()
     recipe = models.ForeignKey(Recipe,
                                on_delete=models.CASCADE,
                                related_name='instructions')
     ingredients = models.ManyToManyField(RecipeIngredient, blank=True)
+    equipment = models.ManyToManyField(Equipment, blank=True)
     uid = models.UUIDField(default=uuid.uuid4,
                            editable=False,
                            primary_key=True)
 
     def __str__(self):
-        return f'{self.recipe} {self.order}: {self.orig_text}'
+        return f'{self.order}: {self.text}'
+
+    def __repr__(self):
+        return f'Instruction: {self}. ' \
+               f'Ingredients: {self.ingredients}. ' \
+               f'Equipment: {self.equipment}. ' \
+               f'Recipe: {self.recipe}'
