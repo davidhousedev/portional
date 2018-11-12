@@ -1,0 +1,7 @@
+@font-face { font-family: open-dyslexic; src: url('./fonts/OpenDyslexic-Regular.ttf'); }
+
+// TODO: Allow users to turn off open dyslexic font in Javascript
+
+body {
+  font-family: open-dyslexic;
+}
