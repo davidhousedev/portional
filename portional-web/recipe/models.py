@@ -45,8 +45,7 @@ class RecipeIngredient(models.Model):
                            primary_key=True)
 
     def __str__(self):
-        return f'{self.quantity or self.volume} ' \
-               f'{self.ingredient}'
+        return f'{self.amount} {self.ingredient}'
 
     def __repr__(self):
         return f'Recipe Ingredient: {self} used in {self.recipe}'
@@ -58,6 +57,9 @@ class Equipment(models.Model):
                            editable=False,
                            primary_key=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Instruction(models.Model):
     text = models.TextField()
@@ -65,8 +67,12 @@ class Instruction(models.Model):
     recipe = models.ForeignKey(Recipe,
                                on_delete=models.CASCADE,
                                related_name='instructions')
-    ingredients = models.ManyToManyField(RecipeIngredient, blank=True)
-    equipment = models.ManyToManyField(Equipment, blank=True)
+    ingredients = models.ManyToManyField(RecipeIngredient,
+                                         blank=True,
+                                         null=True)
+    equipment = models.ManyToManyField(Equipment,
+                                       blank=True,
+                                       null=True)
     uid = models.UUIDField(default=uuid.uuid4,
                            editable=False,
                            primary_key=True)

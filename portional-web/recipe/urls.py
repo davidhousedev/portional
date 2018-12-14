@@ -7,10 +7,10 @@ from . import views
 router = DefaultRouter()
 router.register(r'recipes', views.RecipeViewSet)
 router.register(r'users', views.UserViewSet)
-router.register(r'recipe_ingredient', views.RecipeIngredientViewSet)
-router.register(r'ingredient', views.IngredientViewSet)
+router.register(r'recipe_ingredients', views.RecipeIngredientViewSet)
+router.register(r'ingredients', views.IngredientViewSet)
 router.register(r'equipment', views.EquipmentViewSet)
-router.register(r'instruction', views.InstructionViewSet)
+router.register(r'instructions', views.InstructionViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

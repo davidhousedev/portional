@@ -20,11 +20,8 @@ class IngredientSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class RecipeIngredientSerializer(serializers.HyperlinkedModelSerializer):
-    owner = serializers.HyperlinkedRelatedField(
-        view_name='user-detail',
-        read_only=True)
-    ingredient = serializers.HyperlinkedRelatedField(
-        view_name='ingredient-detail',
+    ingredient = serializers.SlugRelatedField(
+        slug_field='name',
         queryset=models.Ingredient.objects.all())
     recipe = serializers.HyperlinkedRelatedField(
         view_name='recipe-detail',
@@ -32,20 +29,15 @@ class RecipeIngredientSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = models.RecipeIngredient
-        fields = '__all__'
+        exclude = ('owner',)
 
 
-class RecipeSerializer(serializers.HyperlinkedModelSerializer):
-    owner = serializers.HyperlinkedRelatedField(
-        view_name='user-detail', read_only=True
-    )
-    ingredients = RecipeIngredientSerializer(
-        read_only=True,
-        many=True)
+class NestedRecipeIngredientSerializer(RecipeIngredientSerializer):
+    recipe = None
 
     class Meta:
-        model = models.Recipe
-        fields = '__all__'
+        model = models.RecipeIngredient
+        exclude = ('owner', 'recipe',)
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -67,10 +59,38 @@ class InstructionSerializer(serializers.HyperlinkedModelSerializer):
     recipe = serializers.HyperlinkedRelatedField(
         view_name='recipe-detail',
         queryset=models.Recipe.objects.all())
-    ingredients = RecipeIngredientSerializer(many=True)
+    ingredients = serializers.HyperlinkedRelatedField(
+        view_name='recipeingredient-detail',
+        queryset=models.RecipeIngredient.objects.all(),
+        many=True)
     equipment = serializers.SlugRelatedField(
         slug_field='name',
-        queryset=models.Equipment.objects.all())
+        queryset=models.Equipment.objects.all(),
+        many=True)
     class Meta:
         model = models.Instruction
+        fields = '__all__'
+
+
+class NestedInstructionSerializer(InstructionSerializer):
+    recipe = None
+
+    class Meta:
+        model = models.Instruction
+        exclude = ('recipe',)
+
+
+class RecipeSerializer(serializers.HyperlinkedModelSerializer):
+    owner = serializers.HyperlinkedRelatedField(
+        view_name='user-detail', read_only=True
+    )
+    ingredients = NestedRecipeIngredientSerializer(
+        read_only=True,
+        many=True)
+    instructions = NestedInstructionSerializer(
+        read_only=True,
+        many=True)
+
+    class Meta:
+        model = models.Recipe
         fields = '__all__'
