@@ -1,9 +1,9 @@
 import React from 'react';
-import Page from './page';
+import RecipesPage from './page';
 
 const Root = () => (
   <div>
-    <Page />
+    <RecipesPage />
   </div>
 );
 

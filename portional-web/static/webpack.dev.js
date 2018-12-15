@@ -1,8 +1,9 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
-const host = require('ip').address();
 const path = require('path');
 const webpack = require('webpack');
+
+const port = 8909;
 
 module.exports = merge(common, {
   mode: 'development',
@@ -10,14 +11,14 @@ module.exports = merge(common, {
   devServer: {
     disableHostCheck: true,
     hot: true,
-    host,
+    host: '0.0.0.0',
     headers: { 'Access-Control-Allow-Origin': '*' },
-    port: 8080,
-    publicPath: `http://${host}:8080/`, // Full host necessary for hot module replacement
+    port: port,
+    publicPath: `http://0.0.0.0:${port}/`, // Full host necessary for hot module replacement
   },
   output: {
     path: path.resolve('./dist'),
-    publicPath: `http://${host}:8080/`, // Full host necessary for hot module replacement
+    publicPath: `http://localhost:${port}/`, // Full host necessary for hot module replacement
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

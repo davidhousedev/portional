@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 
 
 class IngredientSerializer(serializers.HyperlinkedModelSerializer):
+    uid = serializers.UUIDField(read_only=True)
 
     class Meta:
         model = models.Ingredient
@@ -26,6 +27,7 @@ class RecipeIngredientSerializer(serializers.HyperlinkedModelSerializer):
     recipe = serializers.HyperlinkedRelatedField(
         view_name='recipe-detail',
         queryset=models.Recipe.objects.all())
+    uid = serializers.UUIDField(read_only=True)
 
     class Meta:
         model = models.RecipeIngredient
@@ -43,6 +45,7 @@ class NestedRecipeIngredientSerializer(RecipeIngredientSerializer):
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     recipes = serializers.HyperlinkedRelatedField(
         many=True, view_name='recipe-detail', read_only=True)
+    uid = serializers.UUIDField(read_only=True)
 
     class Meta:
         model = User
@@ -59,14 +62,14 @@ class InstructionSerializer(serializers.HyperlinkedModelSerializer):
     recipe = serializers.HyperlinkedRelatedField(
         view_name='recipe-detail',
         queryset=models.Recipe.objects.all())
-    ingredients = serializers.HyperlinkedRelatedField(
-        view_name='recipeingredient-detail',
-        queryset=models.RecipeIngredient.objects.all(),
+    ingredients = NestedRecipeIngredientSerializer(
         many=True)
     equipment = serializers.SlugRelatedField(
         slug_field='name',
         queryset=models.Equipment.objects.all(),
         many=True)
+    uid = serializers.UUIDField(read_only=True)
+
     class Meta:
         model = models.Instruction
         fields = '__all__'
@@ -90,6 +93,7 @@ class RecipeSerializer(serializers.HyperlinkedModelSerializer):
     instructions = NestedInstructionSerializer(
         read_only=True,
         many=True)
+    uid = serializers.UUIDField(read_only=True)
 
     class Meta:
         model = models.Recipe

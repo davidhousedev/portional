@@ -1,12 +1,12 @@
 import React from 'react';
-import Page from './page';
+import RecipesPage from './recipes-page';
 import { hot, setConfig } from 'react-hot-loader';
 
 setConfig({ logLevel: 'debug', pureSFC: true });
 
 const Root = () => (
   <div>
-    <Page />
+    <RecipesPage />
   </div>
 );
 
