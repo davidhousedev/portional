@@ -36,7 +36,7 @@ const callApiMiddleware = ({ dispatch, getState }) => next => action => {
     response => dispatch({
       type: successType,
       ...payload,
-      data: normalize(response.results, schema),
+      ...normalize(response.results || response, schema),
     }),
     error => dispatch({ type: failureType, ...payload, error }),
   );

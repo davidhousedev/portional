@@ -1,9 +1,9 @@
 import React from 'react';
-import RecipesPage from './page';
+import RootRouter from './root-router';
 
 const Root = () => (
   <div>
-    <RecipesPage />
+    <RootRouter />
   </div>
 );
 

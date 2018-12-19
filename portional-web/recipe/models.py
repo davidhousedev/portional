@@ -77,6 +77,9 @@ class Instruction(models.Model):
                            editable=False,
                            primary_key=True)
 
+    class Meta:
+        ordering = ['order']
+
     def __str__(self):
         return f'{self.order}: {self.text}'
 

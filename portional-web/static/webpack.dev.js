@@ -13,6 +13,7 @@ module.exports = merge(common, {
     hot: true,
     host: '0.0.0.0',
     headers: { 'Access-Control-Allow-Origin': '*' },
+    historyApiFallback: true,
     port: port,
     publicPath: `http://0.0.0.0:${port}/`, // Full host necessary for hot module replacement
   },

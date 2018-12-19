@@ -7,8 +7,7 @@ export const ingredient = new schema.Entity('ingredient', {}, { idAttribute: 'ui
 export const recipeIngredient = new schema.Entity('recipeIngredient', {}, { idAttribute: 'uid' });
 
 export const instruction = new schema.Entity('instruction', {
-  ingredients: [ ingredient ],
-  equipment: [ equipment ],
+  ingredients: [ recipeIngredient ],
 }, { idAttribute: 'uid' });
 
 export const recipe = new schema.Entity('recipe', {
@@ -17,4 +16,5 @@ export const recipe = new schema.Entity('recipe', {
 }, {
   idAttribute: 'uid'
 });
+
 export const recipeList = [ recipe ];
