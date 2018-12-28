@@ -2,12 +2,14 @@ import { createStore, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
 import DevTools from '../containers/DevTools';
+import logger from 'redux-logger';
 
 import callApiMiddleware from './actions/call-api-middleware';
 
 const middleware = [
-  thunk,
   callApiMiddleware,
+  logger,
+  thunk,
 ];
 
 const enhancer = compose(
