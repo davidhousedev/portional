@@ -18,7 +18,6 @@ module.exports = merge(common, {
     publicPath: `http://0.0.0.0:${port}/`, // Full host necessary for hot module replacement
   },
   output: {
-    path: path.resolve('./dist'),
     publicPath: `http://localhost:${port}/`, // Full host necessary for hot module replacement
   },
   plugins: [

@@ -5,8 +5,8 @@ import rootReducer from './reducers';
 import callApiMiddleware from './actions/call-api-middleware';
 
 const middleware = [
-  thunk,
   callApiMiddleware,
+  thunk,
 ];
 
 const enhancer = compose(

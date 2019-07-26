@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTpes from 'prop-types';
 import { connect } from 'react-redux';
-import CreateRecipeForm from '../components/create-recipe-form';
+import Form from '../components/test-form';
 import Typography from '@material-ui/core/Typography';
 
 
@@ -16,7 +16,7 @@ class RecipeCreatePage extends React.Component {
       <div className="recipe-create-page">
         <div className="recipe-create-form">
           <Typography component="h1" variant="h1" gutterBottom>Create a recipe</Typography>
-          <CreateRecipeForm onSubmit={this.submit} />
+          <Form onSubmit={(data) => {console.log('submitted form', data)}} />
         </div>
       </div>
     )
